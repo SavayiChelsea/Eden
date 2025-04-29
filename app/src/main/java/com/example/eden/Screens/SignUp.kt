@@ -254,7 +254,10 @@ fun SignUp(navController: NavHostController, authViewModel: AuthViewModel) {
                     Text(
                         text = "I agree with the Terms & Conditions",
                         fontSize = 12.sp,
-                        color = beige
+                        color = beige,
+                        modifier = Modifier.clickable {
+                            navController.navigate("TermsAndConditions")
+                        }
                     )
                 }
             }

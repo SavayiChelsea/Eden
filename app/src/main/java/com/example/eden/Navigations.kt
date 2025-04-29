@@ -43,7 +43,14 @@ fun AppNavigation(navController: NavHostController, authViewModel: AuthViewModel
                 authViewModel = authViewModel
             )
         }
+        composable("TermsAndConditions"){
+            TermsAndConditions(
+                navController = navController,
+                authViewModel = authViewModel
+            )
         }
+
+    }
 
 }
 
