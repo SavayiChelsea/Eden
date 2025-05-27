@@ -1,5 +1,6 @@
 package com.example.eden
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -75,13 +76,18 @@ class AuthViewModel : ViewModel(){
                             "email" to email
 
                             )
+
+                        Log.d("Signup", "User details: $userId")
                         db.collection("users").document(userId)
                             .set(userDetails)
                             .addOnSuccessListener {
                                 _authState.value = AuthState.Authenticated
+                                Log.d("Signup", "User details saved successfully")
                             }
                             .addOnFailureListener { e ->
                                 _authState.value = AuthState.Error("Failed to save user details: ${e.message}")
+
+                                Log.e("Signup", "Failed to save user details", e)
                             }
                     }                } else {
                     _authState.value = AuthState.Error(task.exception?.message?:"Try Again!")

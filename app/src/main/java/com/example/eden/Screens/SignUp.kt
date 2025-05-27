@@ -36,6 +36,8 @@ import com.example.eden.AuthViewModel
 import com.example.eden.R
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 
 @Composable
 fun SignUp(navController: NavHostController, authViewModel: AuthViewModel) {
@@ -87,7 +89,8 @@ fun SignUp(navController: NavHostController, authViewModel: AuthViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .verticalScroll(rememberScrollState()), //Make column scrollable
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
