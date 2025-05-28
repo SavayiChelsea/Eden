@@ -113,7 +113,7 @@ fun HomePage (navController: NavHostController, authViewModel: AuthViewModel) {
                     onClick = {
                         when (label) {
                             "Ask Eden" -> {
-                                navController.navigate("ask_eden")                            }
+                                navController.navigate("AskEden")                            }
                             "Games" -> {
                                 // Action for Games
                             }
