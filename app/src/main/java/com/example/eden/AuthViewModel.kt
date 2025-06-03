@@ -1,16 +1,22 @@
 package com.example.eden
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class AuthViewModel : ViewModel(){
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
+
+    val webClientId = "743460035156-qkh8h6siek7597tu0si8vg3am3ctnmue.apps.googleusercontent.com"
 
 
     private val _authState = MutableLiveData<AuthState>()
@@ -95,13 +101,40 @@ class AuthViewModel : ViewModel(){
             }
     }
 
-    fun signout(){
-        auth.signOut()
-        _authState.value = AuthState.Unauthenticated
+    fun signInWithGoogle(context: Context, idToken: String, onComplete: () -> Unit) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _authState.value = AuthState.Authenticated
+                    onComplete() // Notify that sign-in was successful
+                } else {
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Sign-in failed")
+                }
+            }
     }
 
+    fun signOut(context: Context, webClientId: String, onComplete: () -> Unit) {
+        // Firebase sign out
+        FirebaseAuth.getInstance().signOut()
+
+        // Google sign out
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(webClientId)
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(context, googleSignInOptions)
+        googleSignInClient.signOut().addOnCompleteListener {
+            _authState.value = AuthState.Unauthenticated
+            onComplete()
+        }
+    }
 
 }
+
+
+
 
 sealed class AuthState{
     object Authenticated : AuthState()

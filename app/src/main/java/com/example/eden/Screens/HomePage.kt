@@ -1,6 +1,5 @@
 package com.example.eden.Screens
 
-import com.example.eden.Screens.*
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -34,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +46,6 @@ import com.example.eden.AuthViewModel
 import com.example.eden.R
 import com.example.eden.ui.theme.CustomBeige
 import com.example.eden.ui.theme.CustomSoftRed
-import com.example.eden.ui.theme.EdenGreen
 import com.example.eden.ui.theme.LightCream
 import com.example.eden.ui.theme.LightPeach
 
@@ -57,6 +56,10 @@ fun HomePage (navController: NavHostController, authViewModel: AuthViewModel) {
     val beige = Color(0xFFF0DCA0)
 
     val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+    // Access webClientId from authViewModel
+    val webClientId = authViewModel.webClientId
 
     LaunchedEffect(key1 = authState.value) {
         when (authState.value) {
@@ -287,10 +290,15 @@ fun HomePage (navController: NavHostController, authViewModel: AuthViewModel) {
                 modifier = Modifier.width(buttonWidth * 2 + 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ){
-                HomeButton("Sign out", modifier = Modifier.width(buttonWidth)){
-                    authViewModel.signout()
-                }
-                }
+                HomeButton(label ="Sign Out", modifier = Modifier.width(buttonWidth), onClick = {
+                    authViewModel.signOut(context, webClientId){
+                        Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
+                    }
+                    navController.navigate("login"){
+                        popUpTo("home"){inclusive = true}
+                    }
+                })
+            }
 
         }
 
@@ -316,9 +324,6 @@ fun HomeButton(label: String, modifier: Modifier = Modifier, onClick: () -> Unit
         )
     }
 }
-
-
-
 
 
 
