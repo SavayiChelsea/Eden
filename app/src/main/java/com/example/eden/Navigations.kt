@@ -9,6 +9,7 @@ import com.example.eden.Screens.ChangePassword
 import com.example.eden.Screens.ForgotPassword
 import com.example.eden.Screens.HomePage
 import com.example.eden.Screens.LogIn
+import com.example.eden.Screens.Profile
 import com.example.eden.Screens.SignUp
 import com.example.eden.Screens.SplashScreen
 import com.example.eden.Screens.TermsAndConditions
@@ -71,6 +72,13 @@ fun AppNavigation(navController: NavHostController, authViewModel: AuthViewModel
 
         composable("ChangePassword"){
             ChangePassword(
+                navController = navController,
+                authViewModel = authViewModel
+            )
+        }
+
+        composable("Profile"){
+            Profile(
                 navController = navController,
                 authViewModel = authViewModel
             )

@@ -1,6 +1,5 @@
 package com.example.eden.Screens
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -93,7 +92,9 @@ fun HomePage (navController: NavHostController, authViewModel: AuthViewModel) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "🔥3", color = Color.White, fontSize = 20.sp)
                 Spacer(modifier = Modifier.width(12.dp))
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    navController.navigate("Profile")
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.account), // replace with your profile icon
                         contentDescription = "Profile",
@@ -281,23 +282,6 @@ fun HomePage (navController: NavHostController, authViewModel: AuthViewModel) {
             ) {
                 HomeButton("Plans", modifier = Modifier.width(buttonWidth)){/*put navigation here*/}
                 HomeButton("Trivia Time", modifier = Modifier.width(buttonWidth)){/*put navigation here*/}
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            //third row
-            Row(
-                modifier = Modifier.width(buttonWidth * 2 + 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ){
-                HomeButton(label ="Sign Out", modifier = Modifier.width(buttonWidth), onClick = {
-                    authViewModel.signOut(context, webClientId){
-                        Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
-                    }
-                    navController.navigate("login"){
-                        popUpTo("home"){inclusive = true}
-                    }
-                })
             }
 
         }
